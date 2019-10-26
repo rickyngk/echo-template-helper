@@ -8,14 +8,6 @@ import (
 	"strings"
 )
 
-// Query struct
-type Query struct {
-	Where  string
-	Offset int64
-	Limit  int64
-	Order  string
-}
-
 // TsqlRepoMetaInterface interface
 type TsqlRepoMetaInterface interface {
 	Name() string
@@ -133,22 +125,18 @@ func TsqlUpdate(tsqlRepoMetaInterface TsqlRepoMetaInterface, cols []string, mode
 	return TsqlRepoExec(tsqlRepoMetaInterface, q, p...)
 }
 
-type insertModelOpts struct {
-	skipIfConflict bool
-}
-
 // TsqlInsert func
-func TsqlInsert(tsqlRepoMetaInterface TsqlRepoMetaInterface, model interface{}, opts *insertModelOpts) (int64, error) {
+func TsqlInsert(tsqlRepoMetaInterface TsqlRepoMetaInterface, model interface{}, opts *InsertModelOpts) (int64, error) {
 	name := tsqlRepoMetaInterface.Name()
 
-	columns := tsqlStructFields(model)
+	columns := TsqlStructFields(model)
 	p := make([]string, len(columns))
 
 	for i := range columns {
 		p[i] = "?"
 	}
 	if opts == nil {
-		opts = &insertModelOpts{
+		opts = &InsertModelOpts{
 			skipIfConflict: false,
 		}
 	}
@@ -166,7 +154,7 @@ func TsqlInsert(tsqlRepoMetaInterface TsqlRepoMetaInterface, model interface{}, 
 }
 
 // TsqlStructFields func
-func tsqlStructFields(d interface{}) []string {
+func TsqlStructFields(d interface{}) []string {
 	t := reflect.TypeOf(d)
 	if t.Kind() == reflect.Ptr {
 		t = t.Elem()
@@ -179,7 +167,7 @@ func tsqlStructFields(d interface{}) []string {
 }
 
 // TsqlStructScan func
-func tsqlStructScan(rows *sql.Rows, model interface{}) error {
+func TsqlStructScan(rows *sql.Rows, model interface{}) error {
 	v := reflect.ValueOf(model)
 	if v.Kind() != reflect.Ptr {
 		return errors.New("model must be pointer")
