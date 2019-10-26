@@ -10,8 +10,8 @@ type DbDriverInterface interface {
 	GetNativeConnector() interface{}
 }
 
-// DataSourceSpecs struct
-type DataSourceSpecs struct {
+// DatasourceSpecs struct
+type DatasourceSpecs struct {
 	Driver   string
 	Address  string
 	Port     int
@@ -21,7 +21,7 @@ type DataSourceSpecs struct {
 	DbName   string
 }
 
-func createDataSourceDriver(source DataSourceSpecs) (DbDriverInterface, error) {
+func createDataSourceDriver(source DatasourceSpecs) (DbDriverInterface, error) {
 	if source.Driver == "mysql" {
 		driver := NewTsqlDriver(source)
 		return driver, nil
@@ -34,7 +34,7 @@ func createDataSourceDriver(source DataSourceSpecs) (DbDriverInterface, error) {
 
 // Connector struct
 type datasourceConnector struct {
-	source DataSourceSpecs
+	source DatasourceSpecs
 	driver DbDriverInterface
 }
 
@@ -56,8 +56,8 @@ func instance() *Datasources {
 	return datasourcesInstance
 }
 
-// RegisterDataSource func
-func RegisterDataSource(datasourceID string, source DataSourceSpecs) (err error) {
+// RegisterDatasource func
+func RegisterDatasource(datasourceID string, source DatasourceSpecs) (err error) {
 	datasources := instance()
 	if _, ok := datasources.connectors[datasourceID]; ok {
 		err = errors.New("DUP_DATASOURCE_ID")

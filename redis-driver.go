@@ -12,7 +12,7 @@ type RedisDriver struct {
 }
 
 // NewRedisDriver - create new connection
-func NewRedisDriver(conf DataSourceSpecs) DbDriverInterface {
+func NewRedisDriver(conf DatasourceSpecs) DbDriverInterface {
 
 	client := redis.NewClient(&redis.Options{
 		Addr:     fmt.Sprintf("%s:%d", conf.Address, conf.Port),

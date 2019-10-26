@@ -14,7 +14,7 @@ type TsqlDriver struct {
 }
 
 // NewTsqlDriver - create new connection
-func NewTsqlDriver(conf DataSourceSpecs) DbDriverInterface {
+func NewTsqlDriver(conf DatasourceSpecs) DbDriverInterface {
 	conn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", conf.Username, conf.Password, conf.Address, conf.Port, conf.DbName)
 	db, err := sql.Open("mysql", conn)
 	if err != nil {
