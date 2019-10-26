@@ -28,3 +28,12 @@ func ResponeOK(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, data)
 }
+
+// GetAuthToken func
+func GetAuthToken(c echo.Context) string {
+	tk := c.QueryParam("authtoken")
+	if len(tk) == 0 {
+		tk = c.Request().Header.Get("Authorization")
+	}
+	return tk
+}
