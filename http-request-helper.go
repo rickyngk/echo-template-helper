@@ -40,11 +40,13 @@ func DoJSONReq(mode string, url string, reqInput interface{}, header map[string]
 	var postData io.Reader = nil
 	var method = http.MethodGet
 	if mode == "POST" || mode == "PUT" || mode == "PATCH" || mode == "OPTIONS" {
-		jsonStr, err := json.Marshal(reqInput)
-		if err != nil {
-			return err
+		if reqInput != nil {
+			jsonStr, err := json.Marshal(reqInput)
+			if err != nil {
+				return err
+			}
+			postData = bytes.NewBuffer(jsonStr)
 		}
-		postData = bytes.NewBuffer(jsonStr)
 		if mode == "POST" {
 			method = http.MethodPost
 		} else if mode == "PUT" {
