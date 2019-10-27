@@ -87,12 +87,11 @@ func DoJSONReq(mode string, url string, reqInput interface{}, header map[string]
 		return HTTPStatusError{res.StatusCode, errors.New(message.Message)}
 	}
 
-	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		return err
-	}
-
 	if output != nil {
+		body, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			return err
+		}
 		jsonErr := json.Unmarshal(body, &output)
 		if jsonErr != nil {
 			return jsonErr
