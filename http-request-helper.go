@@ -92,9 +92,11 @@ func DoJSONReq(mode string, url string, reqInput interface{}, header map[string]
 		return err
 	}
 
-	jsonErr := json.Unmarshal(body, &output)
-	if jsonErr != nil {
-		return jsonErr
+	if output != nil {
+		jsonErr := json.Unmarshal(body, &output)
+		if jsonErr != nil {
+			return jsonErr
+		}
 	}
 	return nil
 }
