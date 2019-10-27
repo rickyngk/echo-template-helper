@@ -90,10 +90,11 @@ func TsqlRepoFind(tsqlRepoMetaInterface TsqlRepoMetaInterface, columns []string,
 		q = fmt.Sprintf("%s WHERE %s", q, query.Where)
 	}
 
+	q = fmt.Sprintf("%s LIMIT %d OFFSET %d", q, limit, offset)
+
 	if query.Order != "" {
 		q = fmt.Sprintf("%s ORDER BY %s", q, query.Order)
 	}
-	q = fmt.Sprintf("%s LIMIT %d OFFSET %d", q, limit, offset)
 
 	if query.Where != "" {
 		rows, err = TsqlRepoQuery(tsqlRepoMetaInterface, q, args...)
