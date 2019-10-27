@@ -40,19 +40,19 @@ func Password(pure string) string {
 }
 
 // Sig hash
-func Sig(txt string) string {
-	return SaltyHash(txt, "jyCtBZP7MxF6jfCG")
+func Sig(txt string, sigKey string) string {
+	return SaltyHash(txt, sigKey)
 }
 
 // SigArr func
-func SigArr(parts []string) string {
-	return Sig(strings.Join(parts, ""))
+func SigArr(parts []string, sigKey string) string {
+	return Sig(strings.Join(parts, ""), sigKey)
 }
 
 // IsValidSig : check if sig is valid
-func IsValidSig(parts []string, ts int64, token string, checksig string) bool {
+func IsValidSig(parts []string, ts int64, token string, sigKey string, checksig string) bool {
 	txt := strings.Join(parts, ",")
 	_s := fmt.Sprintf("%s,%d,%s", txt, ts, token)
-	_sig := Sig(_s)
+	_sig := Sig(_s, sigKey)
 	return _sig == checksig
 }
