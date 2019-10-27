@@ -50,14 +50,14 @@ func TsqlRepoExec(tsqlRepoMetaInterface TsqlRepoMetaInterface, sqlStatement stri
 		stmt, err := db.Prepare(sqlStatement)
 		defer stmt.Close()
 		if err != nil {
-			fmt.Println("[TsqlRepoQuery error] ", err)
-			fmt.Println("[TsqlRepoQuery error] ", sqlStatement)
+			fmt.Println("[TsqlRepoExec error] ", err)
+			fmt.Println("[TsqlRepoExec error] ", sqlStatement)
 			return 0, err
 		}
 		res, err := stmt.Exec(args...)
 		if err != nil {
-			fmt.Println("[TsqlRepoQuery error] ", err)
-			fmt.Println("[TsqlRepoQuery error] ", sqlStatement)
+			fmt.Println("[TsqlRepoExec error] ", err)
+			fmt.Println("[TsqlRepoExec error] ", sqlStatement)
 			return 0, err
 		}
 		return res.RowsAffected()
