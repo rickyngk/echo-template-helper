@@ -6,8 +6,8 @@ import (
 	"github.com/labstack/echo"
 )
 
-// Respone func
-func Respone(c echo.Context, data interface{}) error {
+// Response func
+func Response(c echo.Context, data interface{}) error {
 	outputFormat := c.QueryParam("respfmt")
 	if outputFormat == "xml" {
 		return c.XML(http.StatusOK, data)
@@ -15,8 +15,8 @@ func Respone(c echo.Context, data interface{}) error {
 	return c.JSON(http.StatusOK, data)
 }
 
-// ResponeOK func
-func ResponeOK(c echo.Context) error {
+// ResponseOK func
+func ResponseOK(c echo.Context) error {
 	outputFormat := c.QueryParam("respfmt")
 	data := struct {
 		OK int `json:"ok" xml:"ok"`
