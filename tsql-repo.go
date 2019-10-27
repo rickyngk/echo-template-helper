@@ -103,8 +103,8 @@ func TsqlRepoFind(tsqlRepoMetaInterface TsqlRepoMetaInterface, columns []string,
 	return
 }
 
-// TsqlUpdate func
-func TsqlUpdate(tsqlRepoMetaInterface TsqlRepoMetaInterface, cols []string, model interface{}, query *Query, args ...interface{}) (int64, error) {
+// TsqlRepoUpdate func
+func TsqlRepoUpdate(tsqlRepoMetaInterface TsqlRepoMetaInterface, cols []string, model interface{}, query *Query, args ...interface{}) (int64, error) {
 	name := tsqlRepoMetaInterface.Name()
 
 	if query == nil || query.Where == "" {
@@ -125,8 +125,8 @@ func TsqlUpdate(tsqlRepoMetaInterface TsqlRepoMetaInterface, cols []string, mode
 	return TsqlRepoExec(tsqlRepoMetaInterface, q, p...)
 }
 
-// TsqlInsert func
-func TsqlInsert(tsqlRepoMetaInterface TsqlRepoMetaInterface, model interface{}, opts *InsertModelOpts) (int64, error) {
+// TsqlRepoInsert func
+func TsqlRepoInsert(tsqlRepoMetaInterface TsqlRepoMetaInterface, model interface{}, opts *InsertModelOpts) (int64, error) {
 	name := tsqlRepoMetaInterface.Name()
 
 	columns := TsqlStructFields(model)
@@ -151,6 +151,37 @@ func TsqlInsert(tsqlRepoMetaInterface TsqlRepoMetaInterface, model interface{}, 
 		return -1, err
 	}
 	return TsqlRepoExec(tsqlRepoMetaInterface, q, tmp...)
+}
+
+// TsqlRepoCount func
+func TsqlRepoCount(tsqlRepoMetaInterface TsqlRepoMetaInterface, countString string, query *Query, args ...interface{}) (int64, error) {
+	name := tsqlRepoMetaInterface.Name()
+
+	_countString := "*"
+	if countString != "" {
+		_countString = countString
+	}
+
+	q := fmt.Sprintf("SELECT COUNT(%s) FROM `%s`", _countString, name)
+	if query != nil && query.Where != "" {
+		q = fmt.Sprintf("%s WHERE %s", q, query.Where)
+	}
+	row, err := TsqlRepoQuery(tsqlRepoMetaInterface, q, args...)
+	if err != nil {
+		return 0, err
+	}
+	var count int64
+	if row != nil {
+		defer row.Close()
+		for row.Next() {
+			err2 := row.Scan(&count)
+			if err2 != nil {
+				return 0, err2
+			}
+			return count, nil
+		}
+	}
+	return 0, nil
 }
 
 // TsqlStructFields func
