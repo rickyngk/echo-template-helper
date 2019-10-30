@@ -116,7 +116,7 @@ func TsqlRepoUpdate(tsqlRepoMetaInterface TsqlRepoMetaInterface, cols []string, 
 	}
 	setString := strings.Join(setArr, ",")
 	var p []interface{}
-	valueArr, err := tsqlStructProjectedArrValue(model, cols)
+	valueArr, err := TsqlStructProjectedArrValue(model, cols)
 	if err != nil {
 		return -1, err
 	}
@@ -146,7 +146,7 @@ func TsqlRepoInsert(tsqlRepoMetaInterface TsqlRepoMetaInterface, model interface
 	} else {
 		q = fmt.Sprintf("INSERT INTO `%s` (%s) VALUES (%s)", name, strings.Join(columns, ","), strings.Join(p, ","))
 	}
-	tmp, err := sqlStructArrValue(model)
+	tmp, err := TsqlStructArrValue(model)
 	if err != nil {
 		return -1, err
 	}
@@ -257,11 +257,13 @@ func TsqlStructScan(rows *sql.Rows, model interface{}) error {
 	return nil
 }
 
-func sqlStructArrValue(d interface{}) ([]interface{}, error) {
-	return tsqlStructProjectedArrValue(d, nil)
+// TsqlStructArrValue func
+func TsqlStructArrValue(d interface{}) ([]interface{}, error) {
+	return TsqlStructProjectedArrValue(d, nil)
 }
 
-func tsqlStructProjectedArrValue(d interface{}, projectedColumns []string) ([]interface{}, error) {
+// TsqlStructProjectedArrValue func
+func TsqlStructProjectedArrValue(d interface{}, projectedColumns []string) ([]interface{}, error) {
 	var tmp []interface{}
 	v := reflect.ValueOf(d)
 	if v.Kind() == reflect.Ptr {
