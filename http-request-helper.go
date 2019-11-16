@@ -68,11 +68,13 @@ func DoJSONReq(mode string, url string, reqInput interface{}, header map[string]
 		}
 	}
 	res, reqErr := client.Do(req)
-	defer res.Body.Close()
 
 	if reqErr != nil {
 		return reqErr
 	}
+
+	defer res.Body.Close()
+
 	if res.StatusCode != 200 {
 		body, _ := ioutil.ReadAll(res.Body)
 		message := struct {
