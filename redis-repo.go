@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
-	"github.com/go-redis/redis/v7"
+	"github.com/go-redis/redis"
 )
 
 // RedisRepoMetaInterface interface
